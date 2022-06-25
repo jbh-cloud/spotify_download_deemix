@@ -61,7 +61,9 @@ ErrorMessages = {
     'albumDoesntExists': "Track's album does not exsist, failed to gather info.",
     'notLoggedIn': "You need to login to download tracks.",
     'wrongGeolocation': "Your account can't stream the track from your current country.",
-    'wrongGeolocationNoAlternative': "Your account can't stream the track from your current country and no alternative found."
+    'wrongGeolocationNoAlternative': "Your account can't stream the track from your current country and no alternative found.",
+    'infiniteLoopBackoff': "Went into infinite loop trying to generate a download url"
+
 }
 
 class DownloadFailed(DownloadError):
@@ -70,6 +72,9 @@ class DownloadFailed(DownloadError):
         self.errid = errid
         self.message = ErrorMessages[self.errid]
         self.track = track
+
+class TrackSearchInfiniteLoop(DownloadError):
+    pass
 
 class PreferredBitrateNotFound(DownloadError):
     pass

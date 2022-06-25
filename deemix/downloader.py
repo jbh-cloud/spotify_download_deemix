@@ -29,7 +29,7 @@ from deemix.utils.pathtemplates import generatePath, generateAlbumName, generate
 from deemix.tagger import tagID3, tagFLAC
 from deemix.decryption import generateCryptedStreamURL, streamTrack
 from deemix.settings import OverwriteOption
-from deemix.errors import DownloadFailed, MD5NotFound, DownloadCanceled, PreferredBitrateNotFound, TrackNot360, AlbumDoesntExists, DownloadError, ErrorMessages
+from deemix.errors import DownloadFailed, MD5NotFound, DownloadCanceled, PreferredBitrateNotFound, TrackNot360, AlbumDoesntExists, DownloadError, ErrorMessages, TrackSearchInfiniteLoop
 
 logger = logging.getLogger('deemix')
 
@@ -163,7 +163,13 @@ def getPreferredBitrate(dz, track, preferredBitrate, shouldFallback, feelingLuck
         currentTrack = track
         url = getCorrectURL(currentTrack, formatName, formatNumber, feelingLucky)
         newTrack = None
+
+        url_attempts = 0
         while True:
+            # stop infinite loop bug, example track spotify_id = 6R837L5prXTflEAD2GI6vX
+            if url_attempts == 100:
+                raise TrackSearchInfiniteLoop
+
             if not url and hasAlternative:
                 newTrack = dz.gw.get_track_with_fallback(currentTrack.fallbackID)
                 newTrack = map_track(newTrack)
@@ -172,6 +178,7 @@ def getPreferredBitrate(dz, track, preferredBitrate, shouldFallback, feelingLuck
                 hasAlternative = currentTrack.fallbackID != "0"
             if not url: getCorrectURL(currentTrack, formatName, formatNumber, feelingLucky)
             if (url or not hasAlternative): break
+            url_attempts += 1
 
         if url:
             if newTrack: track.parseEssentialData(newTrack)
@@ -296,6 +303,8 @@ class Downloader:
                 self.settings['fallbackBitrate'], self.settings['feelingLucky'],
                 self.downloadObject.uuid, self.listener
             )
+        except TrackSearchInfiniteLoop as e:
+            raise DownloadFailed("infiniteLoopBackoff") from e
         except WrongLicense as e:
             raise DownloadFailed("wrongLicense") from e
         except WrongGeolocation as e:
