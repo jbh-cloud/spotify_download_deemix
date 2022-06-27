@@ -7,7 +7,7 @@ README = (HERE / "README.md").read_text()
 
 setup(
     name="deemix",
-    version="3.6.7",
+    version="3.6.8",
     description="A barebone deezer downloader library",
     long_description=README,
     long_description_content_type="text/markdown",
