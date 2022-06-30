@@ -62,7 +62,7 @@ ErrorMessages = {
     'notLoggedIn': "You need to login to download tracks.",
     'wrongGeolocation': "Your account can't stream the track from your current country.",
     'wrongGeolocationNoAlternative': "Your account can't stream the track from your current country and no alternative found.",
-    'infiniteLoopBackoff': "Went into infinite loop trying to generate a download url"
+    'infiniteLoopBackoff': "Track available on Deezer but unable generate a valid download link"
 
 }
 
