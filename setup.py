@@ -20,13 +20,17 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Operating System :: OS Independent",
     ],
-    python_requires='>=3.7',
+    python_requires=">=3.7",
     packages=find_packages(exclude=("tests",)),
     include_package_data=True,
-    install_requires=["click", "pycryptodomex", "mutagen", "requests", "deezer-py>=1.3.0"],
-    extras_require={
-        "spotify": ["spotipy>=2.11.0"]
-    },
+    install_requires=[
+        "click",
+        "pycryptodomex",
+        "mutagen",
+        "requests",
+        "deezer-py>=1.3.0",
+    ],
+    extras_require={"spotify": ["spotipy>=2.11.0"]},
     entry_points={
         "console_scripts": [
             "deemix=deemix.__main__:download",
