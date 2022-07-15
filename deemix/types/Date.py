@@ -14,12 +14,14 @@ class Date:
 
     def format(self, template):
         elements = {
-            'year': ['YYYY', 'YY', 'Y'],
-            'month': ['MM', 'M'],
-            'day': ['DD', 'D']
+            "year": ["YYYY", "YY", "Y"],
+            "month": ["MM", "M"],
+            "day": ["DD", "D"],
         }
         for element, placeholders in elements.items():
             for placeholder in placeholders:
                 if placeholder in template:
-                    template = template.replace(placeholder, str(getattr(self, element)))
+                    template = template.replace(
+                        placeholder, str(getattr(self, element))
+                    )
         return template
